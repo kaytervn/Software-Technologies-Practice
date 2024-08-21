@@ -40,7 +40,7 @@ const createUser = async (req, res) => {
         message: "Password must be at least 6 characters",
       });
     }
-    if (gender !== 0 && gender !== 1) {
+    if (gender && gender !== 0 && gender !== 1) {
       errors.push({ field: "gender", message: "Gender is invalid" });
     }
     if (errors.length > 0) {
@@ -115,7 +115,7 @@ const updateUser = async (req, res) => {
         message: "Password must be at least 6 characters",
       });
     }
-    if (gender !== true && gender !== false) {
+    if (gender && gender !== 0 && gender !== 1) {
       errors.push({ field: "gender", message: "Gender is invalid" });
     }
     if (errors.length > 0) {
@@ -175,14 +175,34 @@ const getUserById = async (req, res) => {
 
 const getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const { page = 0, size = 10, sort = "createdAt,desc", ...criteria } = req.query;
+    const offset = page * size;
+    const limit = parseInt(size, 10);
+    const [sortField, sortDirection] = sort.split(",");
+    const whereClause = {};
+    for (const key in criteria) {
+      if (criteria[key]) {
+        whereClause[key] = { [Op.like]: `%${criteria[key]}%` };
+      }
+    }
+    const { rows: users, count: totalElements } = await User.findAndCountAll({
+      where: whereClause,
+      offset,
+      limit,
+      order: [[sortField, sortDirection.toUpperCase()]],
+    });
+    const totalPages = Math.ceil(totalElements / size);
     res.status(200).json({
       result: true,
-      message: "Get list users successfully",
-      data: { content: users, totalPages: 0, totalElements: 0 },
+      message: "Get list of users successfully",
+      data: {
+        content: users,
+        totalPages,
+        totalElements,
+      },
     });
   } catch (error) {
-    res.status(500).json({ result: false, message: error });
+    res.status(500).json({ result: false, message: error.message });
   }
 };
 
