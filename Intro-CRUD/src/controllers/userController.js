@@ -165,7 +165,9 @@ const getUserById = async (req, res) => {
     if (!user) {
       return res.status(404).json({ result: false, message: "User not found" });
     }
-    res.status(200).json(user);
+    res
+      .status(200)
+      .json({ result: true, message: "Get user successfully", data: user });
   } catch (error) {
     res.status(500).json({ result: false, message: error });
   }
@@ -174,7 +176,11 @@ const getUserById = async (req, res) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.status(200).json(users);
+    res.status(200).json({
+      result: true,
+      message: "Get list users successfully",
+      data: { content: users, totalPages: 0, totalElements: 0 },
+    });
   } catch (error) {
     res.status(500).json({ result: false, message: error });
   }
