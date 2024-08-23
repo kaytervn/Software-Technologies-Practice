@@ -182,7 +182,7 @@ const getAllUsers = async (req, res) => {
     const whereClause = {};
     for (const key in criteria) {
       if (criteria[key]) {
-        whereClause[key] = { [Op.like]: `%${criteria[key]}%` };
+        whereClause[key] = { [Op.like]: `%${criteria[key].toLowerCase()}%` };
       }
     }
     const { rows: users, count: totalElements } = await User.findAndCountAll({
