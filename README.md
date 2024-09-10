@@ -14,3 +14,16 @@ npm init
 ```js
 npm i express sequelize dotenv bcryptjs mysql2 nodemon
 ```
+
+## Notes
+
+### .gitignore
+
+```
+/node_modules
+/vendor
+/.idea
+.idea/
+.env
+package-lock.json
+```
