@@ -16,6 +16,19 @@ npm init
 npm i express sequelize dotenv bcryptjs mysql2 nodemon
 ```
 
+## Notes
+
+### .gitignore
+
+```
+/node_modules
+/vendor
+/.idea
+.idea/
+.env
+package-lock.json
+```
+
 ## VS Code Extensions:
 
 - Auto Import
@@ -40,3 +53,4 @@ npm i express sequelize dotenv bcryptjs mysql2 nodemon
 - React Native Tools
 - Tailwind CSS IntelliSense
 - Error Lens
+
